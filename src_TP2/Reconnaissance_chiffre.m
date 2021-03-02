@@ -13,6 +13,8 @@ rng('shuffle')
 
 % Bruit
 sig0=0.02;
+precapprox = .1;
+
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -37,8 +39,7 @@ Db= D+sig0*rand(size(D));
 % Analyse des donnees 
 %%%%%%%%%%%%%%%%%%%%%%%
 disp('PCA : calcul du sous-espace');
-%%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
-disp('TO DO')
+[C U k] = acp(Db, precapprox);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%
@@ -70,7 +71,11 @@ disp('TO DO')
     % Classification depuis ACP
      %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
      disp('PCA : classification');
-     disp('TO DO')
+     
+     [~, i0] = min(distance(tes(:,tests), U(:,1:k)));
+     r(tests, k) = i0;
+
+     
      if(tests==k)
        figure(100+k)
        subplot(1,2,1); 
@@ -115,23 +120,23 @@ for tests=1:6
  end
 
 % Affichage du résultat de l'analyse par kernel PCA
-figure(12)
-for tests=1:6
-     hold on
-     plot(1:5, r2(tests,:),  '+', 'Color', couleur(tests,:));
-     hold off
- 
-     for i = 1:4
-        hold on
-         plot(i:0.1:(i+1),r2(tests,i):(r2(tests,i+1)-r2(tests,i))/10:r2(tests,i+1), 'Color', couleur(tests,:),'LineWidth',2)
-         hold off
-     end
-     hold on
-     if(tests==6)
-       testa=9;
-     else
-       testa=tests;  
-     end
-     text(5,r2(tests,5),num2str(testa));
-     hold off
- end
+% figure(12)
+% for tests=1:6
+%      hold on
+%      plot(1:5, r2(tests,:),  '+', 'Color', couleur(tests,:));
+%      hold off
+%  
+%      for i = 1:4
+%         hold on
+%          plot(i:0.1:(i+1),r2(tests,i):(r2(tests,i+1)-r2(tests,i))/10:r2(tests,i+1), 'Color', couleur(tests,:),'LineWidth',2)
+%          hold off
+%      end
+%      hold on
+%      if(tests==6)
+%        testa=9;
+%      else
+%        testa=tests;  
+%      end
+%      text(5,r2(tests,5),num2str(testa));
+%      hold off
+%  end
