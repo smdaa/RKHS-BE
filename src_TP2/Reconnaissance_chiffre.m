@@ -13,7 +13,7 @@ rng('shuffle')
 
 % Bruit
 sig0=0.02;
-precapprox = .1;
+precapprox = 0.5;
 
 
 %tableau des csores de classification
@@ -39,7 +39,7 @@ Db= D+sig0*rand(size(D));
 % Analyse des donnees 
 %%%%%%%%%%%%%%%%%%%%%%%
 disp('PCA : calcul du sous-espace');
-[C U k] = acp(Db, precapprox);
+[C U j] = acp(Db, precapprox);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%
@@ -72,8 +72,10 @@ disp('TO DO')
      %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
      disp('PCA : classification');
      
-     [~, i0] = min(distance(tes(:,tests), U(:,1:k)));
-     r(tests, k) = i0;
+     d = distance(tes(:,tests), U(:,1:j));
+     
+     
+     r(tests, k) = d;
 
      
      if(tests==k)
