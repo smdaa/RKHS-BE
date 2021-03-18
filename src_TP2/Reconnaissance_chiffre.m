@@ -2,7 +2,7 @@
 % un algorithme de reconnaissance de chiffres.
 
 % Nettoyage de l'espace de travail
-clear all; close all;
+clear all; close all; clc;
 
 % Repertories contenant les donnees et leurs lectures
 addpath('Data');
@@ -10,11 +10,9 @@ addpath('Utils')
 
 rng('shuffle')
 
-
 % Bruit
 sig0=0.02;
-precapprox = 0.5;
-
+Precapprox = 0.5;
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -23,31 +21,25 @@ r2=rand(6,5);
 
 for k=1:5
 % Definition des donnees
-file=['D' num2str(k)]
+file=['D' num2str(k)];
 
 % Recuperation des donnees
 disp('Generation de la base de donnees');
 sD=load(file);
 D=sD.(file);
-%
 
 % Bruitage des données
-Db= D+sig0*rand(size(D));
-
+Db= D + sig0 * rand(size(D));
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Analyse des donnees 
 %%%%%%%%%%%%%%%%%%%%%%%
 disp('PCA : calcul du sous-espace');
-[C U j] = acp(Db, precapprox);
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%
+[C, U, j] = acp(Db, Precapprox);
 
 disp('kernel PCA : calcul du sous-espace');
 %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
 disp('TO DO')
-
 %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,31 +58,24 @@ disp('TO DO')
 
  for tests=1:6
     % Bruitage
-    tes(:,tests)=tes(:,tests)+sig0*rand(length(tes(:,tests)),1);
+    tes(:,tests) = tes(:,tests) +sig0 * rand(length(tes(:,tests)),1);
     
     % Classification depuis ACP
-     %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
      disp('PCA : classification');
-     
      d = distance(tes(:,tests), U(:,1:j));
-     
-     
      r(tests, k) = d;
-
      
-     if(tests==k)
-       figure(100+k)
-       subplot(1,2,1); 
-       imshow(reshape(tes(:,tests),[16,16]));
+     if(tests == k)
+       figure(100 + k)
+       subplot(1, 2, 1); 
+       imshow(reshape(tes(:, tests), [16, 16]));
        subplot(1,2,2);
      end  
-    %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%
   
    % Classification depuis kernel ACP
      %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
      disp('kernel PCA : classification');
      disp('TO DO')
-    
     %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%    
  end
  
