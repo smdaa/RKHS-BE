@@ -11,22 +11,22 @@ addpath('Utils')
 rng('shuffle')
 
 % Bruit
-sig0=0.02;
+sig0       = 0.02;
 Precapprox = 0.5;
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
-r=rand(6,5);
-r2=rand(6,5);
+r  = rand(6,5);
+r2 = rand(6,5);
 
-for k=1:5
+for k = 1:5
 % Definition des donnees
 file=['D' num2str(k)];
 
 % Recuperation des donnees
 disp('Generation de la base de donnees');
-sD=load(file);
-D=sD.(file);
+sD = load(file);
+D  = sD.(file);
 
 % Bruitage des données
 Db= D + sig0 * rand(size(D));
@@ -56,7 +56,7 @@ disp('TO DO')
  tes(:,6) = importerIm('test9.jpg',1,1,16,16);
 
 
- for tests=1:6
+ for tests = 1:6
     % Bruitage
     tes(:,tests) = tes(:,tests) +sig0 * rand(length(tes(:,tests)),1);
     
