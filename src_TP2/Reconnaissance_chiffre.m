@@ -12,7 +12,7 @@ rng('shuffle')
 
 % Bruit
 sig0       = 0.02;
-Precapprox = 0.5;
+Precapprox = 1;
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -35,9 +35,21 @@ Db= D + sig0 * rand(size(D));
 % Analyse des donnees 
 %%%%%%%%%%%%%%%%%%%%%%%
 disp('PCA : calcul du sous-espace');
-[C, U, j] = acp(Db, Precapprox);
+[~, U1, j1] = acp(Db, Precapprox);
 
 disp('kernel PCA : calcul du sous-espace');
+K = kernel(Db, 'linear');
+[U2, D2] = eig(K);
+[D2, indices_tri] = sort(diag(D2), 'descend');
+U2 = U2(:,indices_tri);
+j2 = 1;
+while (sqrt(D2(j2) / D2(1)) > 1 - Precapprox) && (j2 < length(D2))
+    j2 = j2 + 1;
+end
+
+alpha = (ones(size(D2)) ./ sqrt((D2))) .* U2;
+Y = alpha' * K;
+
 %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
 disp('TO DO')
 %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%
@@ -58,24 +70,26 @@ disp('TO DO')
 
  for tests = 1:6
     % Bruitage
-    tes(:,tests) = tes(:,tests) +sig0 * rand(length(tes(:,tests)),1);
+    tes(:,tests) = tes(:,tests) +sig0 * rand(length(tes(:, tests)), 1);
     
     % Classification depuis ACP
      disp('PCA : classification');
-     d = distance(tes(:,tests), U(:,1:j));
-     r(tests, k) = d;
+     d1 = distance(tes(:,tests), U1(:, 1:j1));
+     r(tests, k) = d1;
      
-     if(tests == k)
-       figure(100 + k)
-       subplot(1, 2, 1); 
-       imshow(reshape(tes(:, tests), [16, 16]));
-       subplot(1,2,2);
-     end  
+%      if(tests == k)
+%        figure(100 + k)
+%        subplot(1, 2, 1); 
+%        imshow(reshape(tes(:, tests), [16, 16]));
+%        subplot(1,2,2);
+%      end  
   
    % Classification depuis kernel ACP
      %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
      disp('kernel PCA : classification');
-     disp('TO DO')
+     d2 = distance(tes(:,tests), Y(:, 1:j2));
+     
+     disp('TO DO');
     %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%    
  end
  
