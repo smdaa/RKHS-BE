@@ -2,8 +2,8 @@ function d = distance(C, U)
 %distance : calculer la distance de C au sous espace representatif U 
 %
 % Inputs:
-%    C - le vecteur représentant l'image du chiffre a déterminer
-%    U - les bases orthonormales de chacun des sous-espaces
+%    C - le vecteur représentant l'image du chiffre a déterminer (vecteur)
+%    U - les bases orthonormales d'un sous-espaces d'une classe
 %
 % Outputs:
 %    d - distance de C a U

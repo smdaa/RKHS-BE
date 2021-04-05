@@ -19,6 +19,14 @@ Precapprox = 1;
 r  = rand(6,5);
 r2 = rand(6,5);
 
+% Lecture des chiffres à reconnaitre
+tes(:,1) = importerIm('test1.jpg',1,1,16,16);
+tes(:,2) = importerIm('test2.jpg',1,1,16,16);
+tes(:,3) = importerIm('test3.jpg',1,1,16,16);
+tes(:,4) = importerIm('test4.jpg',1,1,16,16);
+tes(:,5) = importerIm('test5.jpg',1,1,16,16);
+tes(:,6) = importerIm('test9.jpg',1,1,16,16);
+
 for k = 1:5
 % Definition des donnees
 file=['D' num2str(k)];
@@ -35,38 +43,15 @@ Db= D + sig0 * rand(size(D));
 % Analyse des donnees 
 %%%%%%%%%%%%%%%%%%%%%%%
 disp('PCA : calcul du sous-espace');
-[~, U1, j1] = acp(Db, Precapprox);
+[~, U1, k1] = acp(Db, Precapprox);
 
 disp('kernel PCA : calcul du sous-espace');
-K = kernel(Db, 'linear');
-[U2, D2] = eig(K);
-[D2, indices_tri] = sort(diag(D2), 'descend');
-U2 = U2(:,indices_tri);
-j2 = 1;
-while (sqrt(D2(j2) / D2(1)) > 1 - Precapprox) && (j2 < length(D2))
-    j2 = j2 + 1;
-end
-
-alpha = (ones(size(D2)) ./ sqrt((D2))) .* U2;
-Y = alpha' * K;
-
-%%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
-disp('TO DO')
-%%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%
+Y = kacp(Db, 'linear');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Reconnaissance de chiffres
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
- % Lecture des chiffres à reconnaitre
- disp('test des chiffres :');
- tes(:,1) = importerIm('test1.jpg',1,1,16,16);
- tes(:,2) = importerIm('test2.jpg',1,1,16,16);
- tes(:,3) = importerIm('test3.jpg',1,1,16,16);
- tes(:,4) = importerIm('test4.jpg',1,1,16,16);
- tes(:,5) = importerIm('test5.jpg',1,1,16,16);
- tes(:,6) = importerIm('test9.jpg',1,1,16,16);
-
+disp('test des chiffres :');
 
  for tests = 1:6
     % Bruitage
@@ -74,8 +59,7 @@ disp('TO DO')
     
     % Classification depuis ACP
      disp('PCA : classification');
-     d1 = distance(tes(:,tests), U1(:, 1:j1));
-     r(tests, k) = d1;
+     r(tests, k) = distance(tes(:,tests), U1(:, 1:k1));
      
 %      if(tests == k)
 %        figure(100 + k)
@@ -87,8 +71,7 @@ disp('TO DO')
    % Classification depuis kernel ACP
      %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
      disp('kernel PCA : classification');
-     d2 = distance(tes(:,tests), Y(:, 1:j2));
-     
+     r2(tests, k) = 
      disp('TO DO');
     %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%    
  end
