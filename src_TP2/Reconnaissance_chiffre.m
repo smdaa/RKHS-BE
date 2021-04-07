@@ -37,16 +37,17 @@ sD = load(file);
 D  = sD.(file);
 
 % Bruitage des données
-Db= D + sig0 * rand(size(D));
+Db = D + sig0 * rand(size(D));
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Analyse des donnees 
 %%%%%%%%%%%%%%%%%%%%%%%
 disp('PCA : calcul du sous-espace');
-[~, U1, k1] = acp(Db, Precapprox);
+[~, U] = acp(Db, Precapprox);
 
 disp('kernel PCA : calcul du sous-espace');
-Y = kacp(Db, 'linear');
+choix = 'linear';
+Y = kacp(Db, choix);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Reconnaissance de chiffres
@@ -59,7 +60,7 @@ disp('test des chiffres :');
     
     % Classification depuis ACP
      disp('PCA : classification');
-     r(tests, k) = distance(tes(:,tests), U1(:, 1:k1));
+     r(tests, k) = distance(tes(:,tests), U);
      
 %      if(tests == k)
 %        figure(100 + k)
@@ -71,7 +72,7 @@ disp('test des chiffres :');
    % Classification depuis kernel ACP
      %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
      disp('kernel PCA : classification');
-     r2(tests, k) = 
+     %r2(tests, k) = distance(Y_, Y);
      disp('TO DO');
     %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%    
  end
@@ -101,26 +102,26 @@ for tests=1:6
      end
      text(5,r(tests,5),num2str(testa));
      hold off
- end
+end
 
 % Affichage du résultat de l'analyse par kernel PCA
-% figure(12)
-% for tests=1:6
-%      hold on
-%      plot(1:5, r2(tests,:),  '+', 'Color', couleur(tests,:));
-%      hold off
-%  
-%      for i = 1:4
-%         hold on
-%          plot(i:0.1:(i+1),r2(tests,i):(r2(tests,i+1)-r2(tests,i))/10:r2(tests,i+1), 'Color', couleur(tests,:),'LineWidth',2)
-%          hold off
-%      end
-%      hold on
-%      if(tests==6)
-%        testa=9;
-%      else
-%        testa=tests;  
-%      end
-%      text(5,r2(tests,5),num2str(testa));
-%      hold off
-%  end
+figure(12)
+for tests=1:6
+     hold on
+     plot(1:5, r2(tests,:),  '+', 'Color', couleur(tests,:));
+     hold off
+ 
+     for i = 1:4
+        hold on
+         plot(i:0.1:(i+1),r2(tests,i):(r2(tests,i+1)-r2(tests,i))/10:r2(tests,i+1), 'Color', couleur(tests,:),'LineWidth',2)
+         hold off
+     end
+     hold on
+     if(tests==6)
+       testa=9;
+     else
+       testa=tests;  
+     end
+     text(5,r2(tests,5),num2str(testa));
+     hold off
+ end

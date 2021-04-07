@@ -1,8 +1,11 @@
 function Y = kacp(X, choix)
+    N = size(X, 2);
+    oneN = repmat(1 / N, N, N);
     K = kernel(X, choix);
-    [U2, D2] = eig(K);
-    [D2, indices_tri] = sort(diag(D2), 'descend');
-    U2 = U2(:,indices_tri);
-    alpha = (ones(size(D2)) ./ sqrt((D2))) .* U2;
+    K_ = K - oneN * K - K * oneN + oneN * K * oneN;
+    [U, D] = eig(K_);
+    [D, indices_tri] = sort(diag(D), 'descend');
+    U = U(:,indices_tri);
+    alpha = (ones(size(D)) ./ sqrt((D))) .* U;
     Y = alpha' * K;
 end
