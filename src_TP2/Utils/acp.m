@@ -1,25 +1,33 @@
-function [C, U] = acp(X, Precapprox)
+function [C, V, D] = acp(X, Precapprox)
 %acp : implantation de l'acp classique 
 %
 % Inputs:
-%    X          - tableau des données
+%    X          - tableau des données (chaque colonne est une image)
 %    Precapprox - précision souhaité
 %
 % Outputs:
-%    U - les vecteurs propres
-%    C - tableau des données dans le le nouveau repère
+%    V - les vecteurs propres
+%    D - les valeurs propres
+%    C - tableau des données dans le le nouveau repère de dimenssion
+%    réduite
 
-[~, n] = size(X);
+    %calcul de la matrice de variance/covariance
+    [~, n] = size(X);
     Xc = X - mean(X);
     Sigma = (1/n) * (Xc) * Xc';
-    [U, D] = eig(Sigma);
-    [D, indices_tri] = sort(diag(D),'descend');
-    U = U(:,indices_tri);
-    C = U' * Xc;
     
+    %calcul des vecteurs/valeurs propres de la matrice Sigma
+    [V, D] = eig(Sigma);
+    [D, indices_tri] = sort(diag(D),'descend');
+    V = V(:,indices_tri);
+    
+    %calcul de la dimenssion réduite qui permet d'obtenir la précision Precapprox
     k = 1;
     while (sqrt(D(k) / D(1)) > 1 - Precapprox) && (k < length(D))
         k = k + 1;
     end
-    U = U(:, 1:k);
+    V = V(:, 1:k);
+    
+    %calcul des images dans le nouveau repère
+    C = V' * Xc;
 end

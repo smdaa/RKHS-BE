@@ -11,7 +11,7 @@ addpath('Utils')
 rng('shuffle')
 
 % Bruit
-sig0       = 0.02;
+sig0       = .5;
 Precapprox = 1;
 
 %tableau des csores de classification
@@ -43,11 +43,11 @@ Db = D + sig0 * rand(size(D));
 % Analyse des donnees 
 %%%%%%%%%%%%%%%%%%%%%%%
 disp('PCA : calcul du sous-espace');
-[~, U] = acp(Db, Precapprox);
+[C, V1, D1] = acp(Db, Precapprox);
 
 disp('kernel PCA : calcul du sous-espace');
-choix = 'linear';
-Y = kacp(Db, choix);
+choix = 'gauss';
+[Y, V2, D2] = kacp(Db, Precapprox, choix);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Reconnaissance de chiffres
@@ -60,21 +60,25 @@ disp('test des chiffres :');
     
     % Classification depuis ACP
      disp('PCA : classification');
-     r(tests, k) = distance(tes(:,tests), U);
-     
-%      if(tests == k)
-%        figure(100 + k)
-%        subplot(1, 2, 1); 
-%        imshow(reshape(tes(:, tests), [16, 16]));
-%        subplot(1,2,2);
-%      end  
-  
+     r(tests, k) = distance(tes(:,tests), V1);
+       
    % Classification depuis kernel ACP
-     %%%%%%%%%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%
      disp('kernel PCA : classification');
-     %r2(tests, k) = distance(Y_, Y);
-     disp('TO DO');
-    %%%%%%%%%%%%%%%%%%%%%%%%% FIN TO DO %%%%%%%%%%%%%%%%%%    
+     %r2(tests, k) = ; %TODO
+    
+   % Reconstruction
+     if(tests == k)
+       figure(100 + k)
+       subplot(1, 3, 1); 
+       imshow(reshape(tes(:, tests), [16, 16]));
+       title('Image');
+       subplot(1, 3, 2);
+       temp = reconstruction_acp(tes(:, tests), V1);
+       imshow(reshape(temp, [16, 16]));
+       title('Acp');
+       subplot(1, 3, 3);
+       
+     end  
  end
  
 end

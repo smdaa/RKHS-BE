@@ -1,5 +1,5 @@
 function d = distance(C, U)
-%distance : calculer la distance de C au sous espace representatif U 
+%distance : calculer la distance de l'image C au sous espace representatif U 
 %
 % Inputs:
 %    C - le vecteur représentant l'image du chiffre a déterminer (vecteur)
