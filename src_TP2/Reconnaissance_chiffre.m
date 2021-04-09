@@ -12,7 +12,9 @@ rng('shuffle')
 
 % Bruit
 sig0       = .5;
-Precapprox = 1;
+
+% Précision souhaité
+Precapprox = .7;
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -28,59 +30,61 @@ tes(:,5) = importerIm('test5.jpg',1,1,16,16);
 tes(:,6) = importerIm('test9.jpg',1,1,16,16);
 
 for k = 1:5
-% Definition des donnees
-file=['D' num2str(k)];
+    % Definition des donnees
+    file=['D' num2str(k)];
 
-% Recuperation des donnees
-disp('Generation de la base de donnees');
-sD = load(file);
-D  = sD.(file);
+    % Recuperation des donnees
+    disp('Generation de la base de donnees');
+    sD = load(file);
+    D  = sD.(file);
 
-% Bruitage des données
-Db = D + sig0 * rand(size(D));
+    % Bruitage des données
+    Db = D + sig0 * rand(size(D));
 
-%%%%%%%%%%%%%%%%%%%%%%%
-% Analyse des donnees 
-%%%%%%%%%%%%%%%%%%%%%%%
-disp('PCA : calcul du sous-espace');
-[C, V1, D1] = acp(Db, Precapprox);
+    %%%%%%%%%%%%%%%%%%%%%%%
+    % Analyse des donnees 
+    %%%%%%%%%%%%%%%%%%%%%%%
+    disp('PCA : calcul du sous-espace');
+    [C, V1, D1] = acp(Db, Precapprox);
 
-disp('kernel PCA : calcul du sous-espace');
-choix = 'gauss';
-[Y, V2, D2] = kacp(Db, Precapprox, choix);
+    disp('kernel PCA : calcul du sous-espace');
+    choix = 'linear';
+    [Y, V2, D2, alpha] = kacp(Db, Precapprox, choix);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Reconnaissance de chiffres
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('test des chiffres :');
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Reconnaissance de chiffres
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    disp('test des chiffres :');
 
- for tests = 1:6
-    % Bruitage
-    tes(:,tests) = tes(:,tests) +sig0 * rand(length(tes(:, tests)), 1);
-    
-    % Classification depuis ACP
-     disp('PCA : classification');
-     r(tests, k) = distance(tes(:,tests), V1);
-       
-   % Classification depuis kernel ACP
-     disp('kernel PCA : classification');
-     %r2(tests, k) = ; %TODO
-    
-   % Reconstruction
-     if(tests == k)
-       figure(100 + k)
-       subplot(1, 3, 1); 
-       imshow(reshape(tes(:, tests), [16, 16]));
-       title('Image');
-       subplot(1, 3, 2);
-       temp = reconstruction_acp(tes(:, tests), V1);
-       imshow(reshape(temp, [16, 16]));
-       title('Acp');
-       subplot(1, 3, 3);
-       
-     end  
- end
- 
+    for tests = 1:6
+        % Bruitage
+        tes(:,tests) = tes(:,tests) +sig0 * rand(length(tes(:, tests)), 1);
+
+        % Classification depuis ACP
+         disp('PCA : classification');
+         r(tests, k) = distance(tes(:,tests), V1);
+
+       % Classification depuis kernel ACP
+         disp('kernel PCA : classification');         
+         %r2(tests, k) = ;
+         
+       % Reconstruction
+         if(tests == k)
+           figure(100 + k)
+           subplot(1, 3, 1); 
+           imshow(reshape(tes(:, tests), [16, 16]));
+           title('Image');
+           subplot(1, 3, 2);
+           temp = reconstruction_acp(tes(:, tests), V1);
+           imshow(reshape(temp, [16, 16]));
+           title('Acp');
+           subplot(1, 3, 3);
+           max_iter = 100;
+           %temp = reconstruction_kacp_gauss(tes(:, tests), Y, alpha, max_iter);
+
+         end  
+    end
+
 end
 
 
