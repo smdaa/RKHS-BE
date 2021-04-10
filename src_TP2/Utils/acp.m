@@ -27,7 +27,6 @@ function [C, V, D] = acp(X, Precapprox)
         k = k + 1;
     end
     V = V(:, 1:k);
-    
-    %calcul des images dans le nouveau repère
+        
     C = V' * Xc;
 end

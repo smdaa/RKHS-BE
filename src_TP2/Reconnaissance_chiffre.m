@@ -80,7 +80,7 @@ for k = 1:5
            title('Acp');
            subplot(1, 3, 3);
            max_iter = 100;
-           %temp = reconstruction_kacp_gauss(tes(:, tests), Y, alpha, max_iter);
+           temp = reconstruction_kacp_gauss(tes(:, tests), Y, alpha, max_iter);
 
          end  
     end

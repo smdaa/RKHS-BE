@@ -27,5 +27,5 @@ function [Y, V, D, alpha] = kacp(X, Precapprox, choix)
     V = V(:, 1:k);
     
     alpha = (ones(size(D)) ./ sqrt((D))) .* V;
-    Y = alpha' * K;
+    Y = K * alpha;
 end
