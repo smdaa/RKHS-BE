@@ -11,10 +11,10 @@ addpath('Utils')
 rng('shuffle')
 
 % Bruit
-sig0       = .01;
+sig0       = .3;
 
 % Précision souhaité
-Precapprox = 0.2;
+Precapprox = .5;
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -49,7 +49,7 @@ for k = 1:5
     [C, V1, D1] = acp(Db, Precapprox);
 
     disp('kernel PCA : calcul du sous-espace');
-    choix = 'linear';
+    choix = 'gauss';
     [Y, V2, D2, alpha] = kacp(Db, Precapprox, choix);
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -68,9 +68,8 @@ for k = 1:5
 
        % Classification depuis kernel ACP
          disp('kernel PCA : classification');
-
-         phi= kernel(tes(:,tests),choix) -2*sum((alpha'*kernel_new_data(Db,tes(:,tests), choix)).^2);
-         r2(tests, k) = phi ;
+         %r2(tests, k) = kernel(tes(:,tests), choix) - 2 * sum((alpha' * kernel_new_data(Db, tes(:,tests), choix)).^2) ;
+         r2(tests, k) = distance(kernel_new_data(Db, tes(:,tests), choix), V2);
          
        % Reconstruction
          if(tests == k)
@@ -79,15 +78,17 @@ for k = 1:5
            subplot(1, 3, 1); 
            imshow(reshape(tes(:, tests), [16, 16]));
            title('Image');
+           
            subplot(1, 3, 2);
            temp = reconstruction_acp(tes(:, tests), V1);
            imshow(reshape(temp, [16, 16]));
            title('Acp');
+           
            subplot(1, 3, 3);
-           max_iter = 100;
-%          temp = reconstruction_kacp_gauss(tes(:, tests), Y, alpha, max_iter);
-%         temp = reconstruction_kacp((tes(:, tests)),alpha);
-
+           max_iter = 10;
+           temp = reconstruction_kacp_gauss(tes(:, tests), Y, alpha, max_iter);
+           imshow(reshape(temp, [16, 16]));
+           title('Kernel acp (guass)');
          end  
     end
 

@@ -5,5 +5,5 @@ function x_ = reconstruction_acp(x, u)
 %     end
     temp = x' * u;
 %     x_ = ones(size(x)) + u * temp'
-      x_ = abs(u * temp')
+      x_ = abs(u * temp'
 end
