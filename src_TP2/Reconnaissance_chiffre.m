@@ -69,7 +69,7 @@ for k = 1:5
        % Classification depuis kernel ACP
          disp('kernel PCA : classification');
 
-         phi= tes(:,tests)'*tes(:,tests) -2*sum((alpha'*kernel_new_data(Db,tes(:,tests), choix)).^2);
+         phi= kernel(tes(:,tests),choix) -2*sum((alpha'*kernel_new_data(Db,tes(:,tests), choix)).^2);
          r2(tests, k) = phi ;
          
        % Reconstruction
