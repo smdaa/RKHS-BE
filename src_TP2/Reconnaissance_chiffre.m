@@ -11,13 +11,13 @@ addpath('Utils')
 rng('shuffle')
 
 % Bruit
-sig0       = .3;
+sig0       = .1;
 
 % Précision souhaité
-Precapprox = .9;
+Precapprox = .5;
 
 % choix du noyau
-choix = 'polynomial';
+choix = 'linear';
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -81,15 +81,15 @@ for k = 1:5
            title('Image');
            
            subplot(1, 3, 2);
-           temp = reconstruction_acp(Db, V1(:, k));
+           temp = reconstruction_acp(Db, V1);
            imshow(reshape(temp, [16, 16]));
-           title('Acp');
+           title('ACP');
            
            subplot(1, 3, 3);
-           max_iter = 1000;
+           max_iter = 10;
            temp1 = reconstruction_kacp_gauss(Y, Db, alpha, max_iter);
            imshow(reshape(temp1, [16, 16]));
-           title('Kernel acp (guass)');
+           title('Kernel ACP (guass)');
          end  
     end
 
@@ -118,6 +118,7 @@ for tests=1:6
      end
      text(5,r(tests,5),num2str(testa));
      hold off
+     title('Affichage du résultat de l analyse par PCA')
 end
 
 % Affichage du résultat de l'analyse par kernel PCA
@@ -140,4 +141,5 @@ for tests=1:6
      end
      text(5,r2(tests,5),num2str(testa));
      hold off
+     title('Affichage du résultat de l analyse par kernel PCA')
  end
