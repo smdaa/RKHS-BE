@@ -26,6 +26,10 @@ function [Y, V, D, alpha] = kacp(X, Precapprox, choix)
     end
     V = V(:, 1:k);
     
-    alpha = (ones(size(D)) ./ sqrt((D))) .* V;
+    alpha=V(:,1:k);
+    lam=diag(D);
+    for j=1:k
+        alpha(:,j)=(alpha(:,j)/norm(alpha(:,j)))/sqrt(D(j));
+    end
     Y = K * alpha;
 end
