@@ -13,7 +13,7 @@ function [C, V, D] = acp(X, Precapprox)
 
     %calcul de la matrice de variance/covariance
     [~, n] = size(X);
-    Xc = X - mean(X);
+    Xc = X - mean(X, 2);
     Sigma = (1/n) * (Xc) * Xc';
     
     %calcul des vecteurs/valeurs propres de la matrice Sigma
