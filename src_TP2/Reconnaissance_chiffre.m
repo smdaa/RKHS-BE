@@ -14,7 +14,7 @@ rng('shuffle')
 sig0       = .3;
 
 % Précision souhaité
-Precapprox = .7;
+Precapprox = .1;
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -60,7 +60,7 @@ for k = 1:5
     for tests = 1:6
         
         % Bruitage
-        tes(:,tests) = tes(:,tests) +sig0 * rand(length(tes(:, tests)), 1);
+        tes(:,tests) = tes(:,tests) +sig0 * randn(length(tes(:, tests)), 1);
 
         % Classification depuis ACP
          disp('PCA : classification');
@@ -85,7 +85,7 @@ for k = 1:5
            
            subplot(1, 3, 3);
            max_iter = 1000;
-           temp1 = reconstruction_kacp_gauss(tes(:, tests), Y, alpha, max_iter);
+           temp1 = reconstruction_kacp_gauss(tes(:, tests), Y,Db, alpha, max_iter);
            imshow(reshape(temp1, [16, 16]));
            title('Kernel acp (guass)');
          end  
