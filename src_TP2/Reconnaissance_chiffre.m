@@ -14,7 +14,10 @@ rng('shuffle')
 sig0       = .3;
 
 % Précision souhaité
-Precapprox = .1;
+Precapprox = .9;
+
+% choix du noyau
+choix = 'polynomial';
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -49,7 +52,6 @@ for k = 1:5
     [C, V1, D1] = acp(Db, Precapprox);
 
     disp('kernel PCA : calcul du sous-espace');
-    choix = 'linear';
     [Y, V2, D2, alpha] = kacp(Db, Precapprox, choix);
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,13 +81,13 @@ for k = 1:5
            title('Image');
            
            subplot(1, 3, 2);
-           temp = reconstruction_acp(tes(:, tests), V1);
+           temp = reconstruction_acp(Db, V1(:, k));
            imshow(reshape(temp, [16, 16]));
            title('Acp');
            
            subplot(1, 3, 3);
            max_iter = 1000;
-           temp1 = reconstruction_kacp_gauss(tes(:, tests), Y,Db, alpha, max_iter);
+           temp1 = reconstruction_kacp_gauss(Y, Db, alpha, max_iter);
            imshow(reshape(temp1, [16, 16]));
            title('Kernel acp (guass)');
          end  
