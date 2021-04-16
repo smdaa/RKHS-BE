@@ -26,6 +26,7 @@ function [C, V, D] = acp(X, Precapprox)
     while (sqrt(D(k) / D(1)) > 1 - Precapprox) && (k < length(D))
         k = k + 1;
     end
+    
     V = V(:, 1:k);
         
     C = V' * Xc;

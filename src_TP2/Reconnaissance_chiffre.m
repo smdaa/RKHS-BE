@@ -17,8 +17,8 @@ sig0       = 0.01;
 Precapprox = .1;
 
 % choix du noyau
-choix = 'polynomial';
-args = 3;
+choix = 'gauss';
+args = 200;
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -56,7 +56,7 @@ for k = 1:5
     %calcul de la matrice du noyau sur les données Db
     K = kernel(Db, choix, args);
     
-    [Y, V2, D2, alpha] = kacp(K, Precapprox);
+    [Y, V2, alpha] = kacp(K, Precapprox);
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Reconnaissance de chiffres
