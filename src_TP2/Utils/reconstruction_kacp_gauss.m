@@ -1,4 +1,4 @@
-function z = reconstruction_kacp_gauss(Y, data, alpha, max_iter)
+function z = reconstruction_kacp_gauss(Y, data, alpha, args, max_iter)
 % Inputs:
 %    data       - le tableau des donnees
 %    Y          - Les composantes principales obtenu par kacp
@@ -14,10 +14,9 @@ function z = reconstruction_kacp_gauss(Y, data, alpha, max_iter)
     end
     z = mean(data, 2);
     k = 0;
-    
     while k < max_iter
-            temp = kernel_new_data(data, z, 'gauss') .* gamma;
-            z=data*temp/sum(temp); 
+            temp = kernel_new_data(data, z, 'gauss', args) .* gamma;
+            z=data * temp/sum(temp); 
             k = k + 1;
     end
     

@@ -1,4 +1,4 @@
-function [Y, V, D, alpha] = kacp(X, Precapprox, choix)
+function [Y, V, D, alpha] = kacp(K, Precapprox)
 %kacp : implantation de l'acp dans le RKHS 
 %
 % Inputs:
@@ -10,9 +10,6 @@ function [Y, V, D, alpha] = kacp(X, Precapprox, choix)
 %    V - les vecteurs propres de K
 %    D - les valeurs propres de K
 %    Y - Les composantes principales
-
-    %calcul de la matrice du noyau sur les données X
-    K = kernel(X, choix);
     
     %calcul des vecteurs/valeurs propres de la matrice du noyau K
     [V, D] = eig(K);
@@ -27,9 +24,10 @@ function [Y, V, D, alpha] = kacp(X, Precapprox, choix)
     V = V(:, 1:k);
     
     alpha=V(:,1:k);
-    lam=diag(D);
+
     for j=1:k
         alpha(:,j)=(alpha(:,j)/norm(alpha(:,j)))/sqrt(D(j));
     end
+    
     Y = K * alpha;
 end
