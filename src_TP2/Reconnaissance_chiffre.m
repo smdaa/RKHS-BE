@@ -11,14 +11,14 @@ addpath('Utils')
 rng('shuffle')
 
 % Bruit
-sig0       = 0.01;
+sig0       = 0;
 
 % Précision souhaité
 Precapprox = .1;
 
 % choix du noyau
 choix = 'gauss';
-args = 200;
+args = 10;
 
 %tableau des csores de classification
 % intialisation aléatoire pour affichage
@@ -55,8 +55,7 @@ for k = 1:5
     disp('kernel PCA : calcul du sous-espace');
     %calcul de la matrice du noyau sur les données Db
     K = kernel(Db, choix, args);
-    
-    [Y, V2, alpha] = kacp(K, Precapprox);
+    [V2, alpha] = kacp(K, Precapprox);
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Reconnaissance de chiffres
@@ -66,29 +65,28 @@ for k = 1:5
     for tests = 1:6
         
         % Bruitage
-        tes(:,tests) = tes(:,tests) +sig0 * randn(length(tes(:, tests)), 1);
+        tes(:,tests) = tes(:,tests) +sig0 * rand(length(tes(:, tests)), 1);
 
         % Classification depuis ACP
          disp('PCA : classification');
-         r(tests, k) = distance(tes(:,tests) - mean(tes(:,tests)), V1);
+        % on test sur des données centrées
+         x   = tes(:,tests);
+         r(tests, k) = distance(x - mean(x), V1);
 
        % Classification depuis kernel ACP
          disp('kernel PCA : classification');
          x   = tes(:,tests);
-         K_x = kernel_new_data(Db, x, choix, args);
+         K_x = kernel_new_image(Db, x, choix, args);
          n = size(K, 1);
          
-         b = kernel(x, choix, args) - (2 / n) * sum(K_x) + (1 / n^2) * sum(K, 'all');
-                  
          proj_m   = V2 * (alpha' * mean(K, 2));
          proj_phi = V2 * (alpha' * K_x);
          
-         a = norm(proj_m - proj_phi, 2) ^ 2;
-         
+         b = kernel(x, choix, args) - (2 / n) * sum(K_x) + (1 / n^2) * sum(K, 'all');
+         a = norm(proj_m - proj_phi) ^ 2;
+               
          r2(tests, k) = 1 - (a / b);
-         
-         %r2(tests, k) = kernel(tes(:,tests), choix) - 2 * sum((alpha' * kernel_new_data(Db, tes(:,tests), choix)).^2) ;
-         
+                  
        % Reconstruction
          if(tests == k)
 
@@ -103,8 +101,9 @@ for k = 1:5
            title('ACP');
            
            subplot(1, 3, 3);
-           max_iter = 100;
-           temp1 = reconstruction_kacp_gauss(Y, Db, alpha, args, max_iter);
+           max_iter = 50;
+           Y_x = K_x' * alpha;
+           temp1 = reconstruction_kacp_gauss(Y_x, Db, alpha, args, max_iter);
            imshow(reshape(temp1, [16, 16]));
            title('Kernel ACP (guass)');
          end  

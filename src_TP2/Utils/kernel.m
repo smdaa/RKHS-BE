@@ -1,4 +1,14 @@
 function K = kernel(X, choix, args)
+%kernel : calcul de la matrice noyau d'une base de donnée X : (chaque colonne est une image)
+%
+% Inputs:
+%    X          - tableau des données (chaque colonne est une image)
+%    choix      - choix du noyau : (linear | polynomial | euclidean)
+%    args       - parametre de calcul (d pour le noyau polynomial | sigma pour le noyau euclidean)
+%
+% Outputs:
+%    K - la matrice noyau
+
     if strcmp(choix, 'linear')
         K = X' * X;
     elseif strcmp(choix, 'polynomial')

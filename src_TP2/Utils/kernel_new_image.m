@@ -1,4 +1,4 @@
-function K = kernel_new_data(X,Y, choix, args)
+function K = kernel_new_image(X,Y, choix, args)
     if strcmp(choix, 'linear')
         K = X' * Y;
     elseif strcmp(choix, 'polynomial')

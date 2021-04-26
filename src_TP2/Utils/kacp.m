@@ -1,24 +1,30 @@
-function [Y, V, alpha] = kacp(K, Precapprox)
+function [V, alpha] = kacp(K, Precapprox)
 %kacp : implantation de l'acp dans le RKHS 
+%
+% Inputs:
+%    K          - la matrice noyau
+%    Precapprox - précision souhaité
+%
+% Outputs:
+%    V         - les vecteurs propres de la matrice noyau
+%    alpha     - pour calculer les composantes principales
+
 
     %calcul des vecteurs/valeurs propres de la matrice du noyau K
     [V, D] = eig(K);
     [D, indices_tri] = sort(diag(D), 'descend');
     V = V(:,indices_tri);
     
+    % normalisation des vecteurs propres
+    V = V ./ repmat(norm(V), size(V,1),1);
+       
     %calcul de la dimenssion réduite qui permet d'obtenir la précision Precapprox
     k = 1;
     while (sqrt(D(k) / D(1)) > 1 - Precapprox) && (k < length(D))
         k = k + 1;
     end    
+    
     V = V(:, 1:k);
-    
-    alpha=V(:,1:k);
+    alpha=(ones(k, 1) ./ sqrt(D(1:k)))' .* V;
 
-    for j=1:k
-        alpha(:,j)=(alpha(:,j)/norm(alpha(:,j)))/sqrt(D(j));
-    end
-        
-    Y = K * alpha;
-    
 end

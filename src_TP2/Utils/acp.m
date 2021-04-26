@@ -6,8 +6,8 @@ function [C, V, D] = acp(X, Precapprox)
 %    Precapprox - précision souhaité
 %
 % Outputs:
-%    V - les vecteurs propres
-%    D - les valeurs propres
+%    V - les vecteurs propres de la matrice covariance
+%    D - les valeurs propres de la matrice covariance
 %    C - tableau des données dans le le nouveau repère de dimenssion
 %    réduite
 
@@ -26,8 +26,9 @@ function [C, V, D] = acp(X, Precapprox)
     while (sqrt(D(k) / D(1)) > 1 - Precapprox) && (k < length(D))
         k = k + 1;
     end
-    
+
     V = V(:, 1:k);
         
     C = V' * Xc;
+
 end
