@@ -45,7 +45,6 @@ for k = 1:5
 
     % Bruitage des données
     Db = D + sig0 * rand(size(D));
-    Db_c=Db-mean(Db,2);
     %%%%%%%%%%%%%%%%%%%%%%%
     % Analyse des donnees 
     %%%%%%%%%%%%%%%%%%%%%%%
@@ -84,7 +83,7 @@ for k = 1:5
          proj_phi = V2 * (alpha' * K_x);
          
          b = kernel(x, choix, args) - (2 / n) * sum(K_x) + (1 / n^2) * sum(K, 'all');
-         a = norm(proj_m - proj_phi,2) ^ 2;
+         a = norm(proj_m - proj_phi) ^ 2;
                
          r2(tests, k) = 1 - (a / b);
                   
