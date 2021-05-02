@@ -11,10 +11,10 @@ addpath('Utils')
 rng('shuffle')
 
 % Bruit
-sig0       = 0.1;
+sig0       = 0.3;
 
 % Précision souhaité
-Precapprox = 0.97;
+Precapprox = 0.1;
 
 % choix du noyau
 choix = 'gauss';
