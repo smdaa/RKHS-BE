@@ -1,5 +1,5 @@
 function d = distance(C, U)
-%distance : calculer la distance de l'image C au sous espace representatif U 
+%distance : calculer la distance de l'image C au sous espace representatif U
 %
 % Inputs:
 %    C - le vecteur représentant l'image du chiffre a déterminer (vecteur)
@@ -7,6 +7,6 @@ function d = distance(C, U)
 %
 % Outputs:
 %    d - distance de C a U
-    [m, ~] = size(U);
-    d = norm((eye(m) - U * (U')) * C, 2) / norm(C, 2);
+[m, ~] = size(U);
+d = norm((eye(m) - U * (U')) * C, 2) / norm(C, 2);
 end
